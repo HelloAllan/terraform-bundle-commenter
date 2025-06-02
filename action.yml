@@ -1,0 +1,30 @@
+name: "Terraform Pull Request Commenter"
+description: "Adds opinionated comments to a PR from Terraform fmt/init/plan output."
+author: "Try GRIT"
+branding:
+  icon: "git-pull-request"
+  color: "purple"
+inputs:
+  command:
+    description: "The terraform command to run (fmt, init, plan)"
+    required: true
+  directory:
+    description: "Directory containing terraform files"
+    required: true
+  workspace:
+    description: "Terraform workspace to use"
+    required: false
+    default: "default"
+  github_token:
+    description: "GitHub token for API access"
+    required: true
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.command }}
+    - ${{ inputs.directory }}
+    - --token
+    - ${{ inputs.github_token }}
+  env:
+    TERRAFORM_WORKSPACE: ${{ inputs.workspace }}
