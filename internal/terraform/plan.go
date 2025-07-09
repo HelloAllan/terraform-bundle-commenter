@@ -45,7 +45,12 @@ func ParsePlan(plan string, maxlength int) string {
 			if strings.HasPrefix(trimmedLine, "-") ||
 				strings.HasPrefix(trimmedLine, "+") ||
 				strings.HasPrefix(trimmedLine, "~") {
-				indentation := strings.Repeat(" ", len(line)-len(trimmedLine)-1)
+				// Calculate indentation safely to avoid negative repeat count
+				indentCount := len(line) - len(trimmedLine) - 1
+				if indentCount < 0 {
+					indentCount = 0
+				}
+				indentation := strings.Repeat(" ", indentCount)
 				prefix := string(trimmedLine[0])
 				if prefix == "~" {
 					prefix = "!"
